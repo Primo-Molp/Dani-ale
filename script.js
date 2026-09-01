@@ -128,7 +128,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // COUNTDOWN
     // -------------------------------------------------------------------------
     // Fecha objetivo del evento: 3 de octubre de 2026 a las 17:00.
-    const countdownDate = new Date('Oct 03, 2026 17:00:00').getTime();
+    const countdownDate = new Date('Oct 03, 2026 14:00:00').getTime();
 
     // Formato visual: agrega 0 a la izquierda (ej. 08).
     function formatNumber(number) {
