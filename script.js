@@ -55,6 +55,68 @@ function stopSlideShow() {
 // -----------------------------------------------------------------------------
 // Todo se ejecuta cuando el HTML ya termino de cargar.
 document.addEventListener('DOMContentLoaded', () => {
+        // -------------------------------------------------------------------------
+    // INVITACIÓN PERSONALIZADA POR URL
+    // -------------------------------------------------------------------------
+
+    const params = new URLSearchParams(window.location.search);
+
+    const guestName = (params.get('nombre') || '').trim();
+
+    const guestSeatsRaw = parseInt(params.get('personas') || '1', 10);
+    const guestSeats = Number.isFinite(guestSeatsRaw) && guestSeatsRaw > 0
+        ? guestSeatsRaw
+        : 1;
+
+    const guestNameElement = document.getElementById('guest-name');
+    const guestMessageElement = document.getElementById('guest-message');
+    const guestSeatsElement = document.getElementById('guest-seats');
+    const whatsappConfirmation = document.getElementById('whatsapp-confirmation');
+
+    if (guestName) {
+
+        guestNameElement.textContent = `¡${guestName}, estás invitado/a!`;
+
+        guestMessageElement.textContent =
+            'Queremos compartir contigo este día tan especial.';
+
+        if (guestSeats === 1) {
+            guestSeatsElement.textContent =
+                'Tenemos 1 lugar reservado para ti.';
+        } else {
+            guestSeatsElement.textContent =
+                `Tenemos ${guestSeats} lugares reservados para ti.`;
+        }
+
+        let whatsappMessage;
+
+        if (guestSeats === 1) {
+
+            whatsappMessage =
+                `Hola Daniel y Alexandra, soy ${guestName}. Confirmo mi asistencia a su boda. 🎉💍`;
+
+        } else {
+
+            whatsappMessage =
+                `Hola Daniel y Alexandra, soy ${guestName}. Confirmo mi asistencia a su boda junto con ${guestSeats - 1} acompañante(s). 🎉💍`;
+
+        }
+
+        whatsappConfirmation.href =
+            `https://api.whatsapp.com/send?phone=59162642187&text=${encodeURIComponent(whatsappMessage)}`;
+
+    } else {
+
+        guestNameElement.textContent = '';
+        guestMessageElement.textContent = '';
+        guestSeatsElement.textContent = '';
+
+        const defaultMessage =
+            '¡Gracias por la invitación a su boda! Por supuesto que estaré ahí para celebrar con ustedes 🎉💒';
+
+        whatsappConfirmation.href =
+            `https://api.whatsapp.com/send?phone=59162642187&text=${encodeURIComponent(defaultMessage)}`;
+    }
     // Portada: mostrar primera foto y arrancar autoplay.
     showSlide(1);
     startSlideShow();
@@ -68,6 +130,7 @@ document.addEventListener('DOMContentLoaded', () => {
             startSlideShow();
         });
     });
+    
 
     // -------------------------------------------------------------------------
     // PARALLAX EN HOME
@@ -239,6 +302,7 @@ document.addEventListener('DOMContentLoaded', () => {
         loadingScreen.style.display = 'none';
         mainContent.classList.add('show-content');
     });
+    
 
     // -------------------------------------------------------------------------
     // FADE-IN AL HACER SCROLL
